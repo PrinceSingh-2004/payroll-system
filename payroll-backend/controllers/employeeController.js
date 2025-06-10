@@ -16,7 +16,7 @@ exports.getAllEmployees = async (req, res) => {
     res.status(200).json(employees);
   } catch (err) {
     res.status(500).json({ error: err.message });
-  }
+  }f
 };
 
 exports.getEmployeeById = async (req, res) => {
