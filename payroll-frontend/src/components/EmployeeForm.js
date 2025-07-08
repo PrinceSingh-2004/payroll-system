@@ -10,10 +10,10 @@ import {
 
 const EmployeeForm = ({ onSubmit }) => {
   const [employee, setEmployee] = useState({
-    name: '',
-    email: '',
+    fullName: '',
     role: '',
-    salaryType: '',
+    salary: '',
+    hourlyRate: '',
   });
 
   const handleChange = (e) => {
@@ -25,8 +25,15 @@ const EmployeeForm = ({ onSubmit }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(employee);
-    setEmployee({ name: '', email: '', role: '', salaryType: '' });
+    // Only send relevant fields
+    const payload = {
+      fullName: employee.fullName,
+      role: employee.role,
+      salary: employee.role === 'salaried' ? parseFloat(employee.salary) : null,
+      hourlyRate: employee.role === 'hourly' ? parseFloat(employee.hourlyRate) : null,
+    };
+    onSubmit(payload);
+    setEmployee({ fullName: '', role: '', salary: '', hourlyRate: '' });
   };
 
   return (
@@ -39,30 +46,9 @@ const EmployeeForm = ({ onSubmit }) => {
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
-              label="Name"
-              name="name"
-              value={employee.name}
-              onChange={handleChange}
-              required
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              fullWidth
-              label="Email"
-              name="email"
-              value={employee.email}
-              onChange={handleChange}
-              required
-              type="email"
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              fullWidth
-              label="Role"
-              name="role"
-              value={employee.role}
+              label="Full Name"
+              name="fullName"
+              value={employee.fullName}
               onChange={handleChange}
               required
             />
@@ -71,9 +57,9 @@ const EmployeeForm = ({ onSubmit }) => {
             <TextField
               select
               fullWidth
-              label="Salary Type"
-              name="salaryType"
-              value={employee.salaryType}
+              label="Role"
+              name="role"
+              value={employee.role}
               onChange={handleChange}
               required
             >
@@ -81,6 +67,32 @@ const EmployeeForm = ({ onSubmit }) => {
               <MenuItem value="hourly">Hourly</MenuItem>
             </TextField>
           </Grid>
+          {employee.role === 'salaried' && (
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label="Salary"
+                name="salary"
+                type="number"
+                value={employee.salary}
+                onChange={handleChange}
+                required
+              />
+            </Grid>
+          )}
+          {employee.role === 'hourly' && (
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label="Hourly Rate"
+                name="hourlyRate"
+                type="number"
+                value={employee.hourlyRate}
+                onChange={handleChange}
+                required
+              />
+            </Grid>
+          )}
           <Grid item xs={12}>
             <Button type="submit" variant="contained" color="primary">
               Add Employee

@@ -6,20 +6,30 @@ import {
   Button,
   Grid,
   Paper,
-  Typography
+  Typography,
+  MenuItem
 } from '@mui/material';
+import { getAllEmployees } from '../services/employeeService';
 
 const VacationForm = ({ onSubmit, initialData = null, onCancel }) => {
   const [formData, setFormData] = useState({
-    employeeName: '',
+    employeeId: '',
     startDate: '',
-    endDate: '',
-    reason: ''
+    endDate: ''
   });
+  const [employees, setEmployees] = useState([]);
+
+  useEffect(() => {
+    getAllEmployees().then(res => setEmployees(res.data));
+  }, []);
 
   useEffect(() => {
     if (initialData) {
-      setFormData(initialData);
+      setFormData({
+        employeeId: initialData.employeeId || '',
+        startDate: initialData.startDate || '',
+        endDate: initialData.endDate || ''
+      });
     }
   }, [initialData]);
 
@@ -31,12 +41,7 @@ const VacationForm = ({ onSubmit, initialData = null, onCancel }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit(formData);
-    setFormData({
-      employeeName: '',
-      startDate: '',
-      endDate: '',
-      reason: ''
-    });
+    setFormData({ employeeId: '', startDate: '', endDate: '' });
   };
 
   return (
@@ -48,12 +53,17 @@ const VacationForm = ({ onSubmit, initialData = null, onCancel }) => {
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
             <TextField
-              name="employeeName"
-              label="Employee Name"
-              value={formData.employeeName}
+              select
+              name="employeeId"
+              label="Employee"
+              value={formData.employeeId}
               onChange={handleChange}
               fullWidth required
-            />
+            >
+              {employees.map(emp => (
+                <MenuItem key={emp.id} value={emp.id}>{emp.fullName}</MenuItem>
+              ))}
+            </TextField>
           </Grid>
           <Grid item xs={12} sm={3}>
             <TextField
@@ -75,17 +85,6 @@ const VacationForm = ({ onSubmit, initialData = null, onCancel }) => {
               onChange={handleChange}
               fullWidth required
               InputLabelProps={{ shrink: true }}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              name="reason"
-              label="Reason"
-              value={formData.reason}
-              onChange={handleChange}
-              fullWidth required
-              multiline
-              rows={2}
             />
           </Grid>
           <Grid item xs={12} display="flex" justifyContent="flex-end" gap={2}>

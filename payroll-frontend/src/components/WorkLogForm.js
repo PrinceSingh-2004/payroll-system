@@ -2,22 +2,28 @@
 
 import React, { useState, useEffect } from 'react';
 import {
-  TextField, Button, Grid, Paper, Typography
+  TextField, Button, Grid, Paper, Typography, MenuItem
 } from '@mui/material';
+import { getAllEmployees } from '../services/employeeService';
 
 const WorkLogForm = ({ onSubmit, onCancel, initialData = {} }) => {
   const [formData, setFormData] = useState({
-    employeeName: '',
+    employeeId: '',
     date: '',
-    hours: ''
+    hoursWorked: ''
   });
+  const [employees, setEmployees] = useState([]);
+
+  useEffect(() => {
+    getAllEmployees().then(res => setEmployees(res.data));
+  }, []);
 
   useEffect(() => {
     if (initialData) {
       setFormData({
-        employeeName: initialData.employeeName || '',
+        employeeId: initialData.employeeId || '',
         date: initialData.date || '',
-        hours: initialData.hours || ''
+        hoursWorked: initialData.hoursWorked || ''
       });
     }
   }, [initialData]);
@@ -30,7 +36,7 @@ const WorkLogForm = ({ onSubmit, onCancel, initialData = {} }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit(formData);
-    setFormData({ employeeName: '', date: '', hours: '' });
+    setFormData({ employeeId: '', date: '', hoursWorked: '' });
   };
 
   return (
@@ -42,12 +48,17 @@ const WorkLogForm = ({ onSubmit, onCancel, initialData = {} }) => {
         <Grid container spacing={2}>
           <Grid item xs={12} sm={4}>
             <TextField
-              label="Employee Name"
-              name="employeeName"
-              value={formData.employeeName}
+              select
+              label="Employee"
+              name="employeeId"
+              value={formData.employeeId}
               onChange={handleChange}
               fullWidth required
-            />
+            >
+              {employees.map(emp => (
+                <MenuItem key={emp.id} value={emp.id}>{emp.fullName}</MenuItem>
+              ))}
+            </TextField>
           </Grid>
           <Grid item xs={12} sm={4}>
             <TextField
@@ -63,9 +74,9 @@ const WorkLogForm = ({ onSubmit, onCancel, initialData = {} }) => {
           <Grid item xs={12} sm={4}>
             <TextField
               label="Hours Worked"
-              name="hours"
+              name="hoursWorked"
               type="number"
-              value={formData.hours}
+              value={formData.hoursWorked}
               onChange={handleChange}
               fullWidth required
             />

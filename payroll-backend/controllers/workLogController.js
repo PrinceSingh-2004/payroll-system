@@ -26,3 +26,12 @@ exports.getWorkLogsByEmployee = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+exports.getWorkLogCount = async (req, res) => {
+  try {
+    const count = await WorkLog.count();
+    res.status(200).json({ count });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};

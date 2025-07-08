@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, Divider } from '@mui/material';
+import { Container, Typography, Divider, CircularProgress, Box } from '@mui/material';
 import HolidayForm from '../components/HolidayForm';
 import HolidayList from '../components/HolidayList';
 import ConfirmationDialog from '../components/ConfirmationDialog';
@@ -17,18 +17,22 @@ const HolidayPage = () => {
   const [selectedHoliday, setSelectedHoliday] = useState(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [toast, setToast] = useState({ open: false, message: '', severity: 'success' });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchHolidays();
   }, []);
 
   const fetchHolidays = async () => {
+    setLoading(true);
     try {
       const response = await getAllHolidays();
       setHolidays(response.data);
     } catch (error) {
       console.error(error);
       setToast({ open: true, message: 'Failed to fetch holidays.', severity: 'error' });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -74,10 +78,16 @@ const HolidayPage = () => {
 
   return (
     <Container>
-      <Typography variant="h4" gutterBottom>Holidays</Typography>
+      <Typography variant="h4" gutterBottom fontWeight={700}>Holidays</Typography>
       <HolidayForm onSubmit={handleFormSubmit} initialData={selectedHoliday} />
       <Divider sx={{ my: 2 }} />
-      <HolidayList holidays={holidays} onEdit={handleEdit} onDelete={handleDelete} />
+      {loading ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', my: 6 }}>
+          <CircularProgress />
+        </Box>
+      ) : (
+        <HolidayList holidays={holidays} onEdit={handleEdit} onDelete={handleDelete} />
+      )}
 
       <ConfirmationDialog
         open={confirmOpen}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, Divider } from '@mui/material';
+import { Container, Typography, Divider, CircularProgress, Box } from '@mui/material';
 import VacationForm from '../components/VacationForm';
 import VacationList from '../components/VacationList';
 import ConfirmationDialog from '../components/ConfirmationDialog';
@@ -11,24 +11,31 @@ import {
   updateVacation,
   deleteVacation,
 } from '../services/vacationService';
+import { getAllEmployees } from '../services/employeeService';
 
 const VacationPage = () => {
   const [vacations, setVacations] = useState([]);
   const [selectedVacation, setSelectedVacation] = useState(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [toast, setToast] = useState({ open: false, message: '', severity: 'success' });
+  const [loading, setLoading] = useState(true);
+  const [employees, setEmployees] = useState([]);
 
   useEffect(() => {
     fetchVacations();
+    getAllEmployees().then(res => setEmployees(res.data));
   }, []);
 
   const fetchVacations = async () => {
+    setLoading(true);
     try {
       const response = await getAllVacations();
       setVacations(response.data);
     } catch (error) {
       console.error(error);
       setToast({ open: true, message: 'Failed to fetch vacations.', severity: 'error' });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -74,10 +81,16 @@ const VacationPage = () => {
 
   return (
     <Container>
-      <Typography variant="h4" gutterBottom>Vacations</Typography>
+      <Typography variant="h4" gutterBottom fontWeight={700}>Vacations</Typography>
       <VacationForm onSubmit={handleFormSubmit} initialData={selectedVacation} />
       <Divider sx={{ my: 2 }} />
-      <VacationList vacations={vacations} onEdit={handleEdit} onDelete={handleDelete} />
+      {loading ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', my: 6 }}>
+          <CircularProgress />
+        </Box>
+      ) : (
+        <VacationList vacations={vacations} employees={employees} onEdit={handleEdit} onDelete={handleDelete} />
+      )}
 
       <ConfirmationDialog
         open={confirmOpen}

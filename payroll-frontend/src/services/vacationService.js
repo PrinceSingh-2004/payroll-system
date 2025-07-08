@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE = 'http://localhost:5000/api/vacations';
+const API_BASE = `${process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000/api'}/vacations`;
 
 export const getAllVacations = () => axios.get(API_BASE);
 export const getVacationById = (id) => axios.get(`${API_BASE}/${id}`);

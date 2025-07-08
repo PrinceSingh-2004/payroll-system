@@ -8,26 +8,29 @@ import {
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-const VacationList = ({ vacations, onEdit, onDelete }) => {
+const VacationList = ({ vacations, employees = [], onEdit, onDelete }) => {
+  // Helper to get employee name from id
+  const getEmployeeName = (id) => {
+    const emp = employees.find(e => e.id === id);
+    return emp ? emp.fullName : id;
+  };
   return (
     <TableContainer component={Paper}>
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Employee Name</TableCell>
+            <TableCell>Employee</TableCell>
             <TableCell>Start Date</TableCell>
             <TableCell>End Date</TableCell>
-            <TableCell>Reason</TableCell>
             <TableCell align="right">Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {vacations.map((vacation, index) => (
             <TableRow key={index}>
-              <TableCell>{vacation.employeeName}</TableCell>
+              <TableCell>{getEmployeeName(vacation.employeeId)}</TableCell>
               <TableCell>{vacation.startDate}</TableCell>
               <TableCell>{vacation.endDate}</TableCell>
-              <TableCell>{vacation.reason}</TableCell>
               <TableCell align="right">
                 <IconButton onClick={() => onEdit(vacation)} color="primary">
                   <EditIcon />
@@ -40,7 +43,7 @@ const VacationList = ({ vacations, onEdit, onDelete }) => {
           ))}
           {vacations.length === 0 && (
             <TableRow>
-              <TableCell colSpan={5} align="center">
+              <TableCell colSpan={4} align="center">
                 No vacation records found.
               </TableCell>
             </TableRow>

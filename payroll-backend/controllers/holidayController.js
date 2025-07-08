@@ -17,3 +17,12 @@ exports.getAllHolidays = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+exports.getHolidayCount = async (req, res) => {
+  try {
+    const count = await Holiday.count();
+    res.status(200).json({ count });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};

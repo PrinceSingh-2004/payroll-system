@@ -12,15 +12,14 @@ import {
 const HolidayForm = ({ onSubmit, selectedHoliday, onCancel }) => {
   const [form, setForm] = useState({
     name: '',
-    date: '',
-    description: ''
+    date: ''
   });
 
   useEffect(() => {
     if (selectedHoliday) {
-      setForm(selectedHoliday);
+      setForm({ name: selectedHoliday.name, date: selectedHoliday.date });
     } else {
-      setForm({ name: '', date: '', description: '' });
+      setForm({ name: '', date: '' });
     }
   }, [selectedHoliday]);
 
@@ -35,7 +34,7 @@ const HolidayForm = ({ onSubmit, selectedHoliday, onCancel }) => {
     e.preventDefault();
     if (form.name && form.date) {
       onSubmit(form);
-      setForm({ name: '', date: '', description: '' });
+      setForm({ name: '', date: '' });
     }
   };
 
@@ -61,12 +60,6 @@ const HolidayForm = ({ onSubmit, selectedHoliday, onCancel }) => {
             onChange={handleChange}
             InputLabelProps={{ shrink: true }}
             required
-          />
-          <TextField
-            label="Description"
-            name="description"
-            value={form.description}
-            onChange={handleChange}
           />
           <Stack direction="row" spacing={2}>
             <Button type="submit" variant="contained" color="primary">

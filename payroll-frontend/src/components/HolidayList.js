@@ -38,7 +38,6 @@ const HolidayList = ({ holidays, onEdit, onDelete }) => {
             >
               <ListItemText
                 primary={`${holiday.date} - ${holiday.name}`}
-                secondary={holiday.description}
               />
             </ListItem>
           ))}

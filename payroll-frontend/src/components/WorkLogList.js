@@ -7,7 +7,12 @@ import {
 } from '@mui/material';
 import { Edit, Delete } from '@mui/icons-material';
 
-const WorkLogList = ({ workLogs, onEdit, onDelete }) => {
+const WorkLogList = ({ workLogs, employees = [], onEdit, onDelete }) => {
+  // Helper to get employee name from id
+  const getEmployeeName = (id) => {
+    const emp = employees.find(e => e.id === id);
+    return emp ? emp.fullName : id;
+  };
   return (
     <TableContainer component={Paper}>
       <Table>
@@ -22,9 +27,9 @@ const WorkLogList = ({ workLogs, onEdit, onDelete }) => {
         <TableBody>
           {workLogs.map((log) => (
             <TableRow key={log.id}>
-              <TableCell>{log.employeeName}</TableCell>
+              <TableCell>{getEmployeeName(log.employeeId)}</TableCell>
               <TableCell>{log.date}</TableCell>
-              <TableCell>{log.hours}</TableCell>
+              <TableCell>{log.hoursWorked}</TableCell>
               <TableCell>
                 <IconButton onClick={() => onEdit(log)}><Edit /></IconButton>
                 <IconButton onClick={() => onDelete(log.id)}><Delete /></IconButton>

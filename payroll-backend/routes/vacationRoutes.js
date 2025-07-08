@@ -3,11 +3,13 @@ const router = express.Router();
 const {
   createVacation,
   getAllVacations,
-  getVacationsByEmployee
+  getVacationsByEmployee,
+  getVacationCount
 } = require('../controllers/vacationController');
 
 router.post('/', createVacation);
 router.get('/', getAllVacations);
 router.get('/employee/:employeeId', getVacationsByEmployee);
+router.get('/count', getVacationCount);
 
 module.exports = router;
