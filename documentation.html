@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PayrollPro – Project Documentation</title>
+  <link href="https://fonts.googleapis.com/css?family=Inter:400,600,700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', Arial, sans-serif; background: #f7f9fb; color: #222; margin: 0; padding: 0; }
+    header { background: #1976d2; color: #fff; padding: 2rem 0 1.5rem 0; text-align: center; }
+    header h1 { margin: 0; font-size: 2.5rem; font-weight: 700; }
+    header p { font-size: 1.2rem; color: #e0f2fe; }
+    nav { background: #fff; border-bottom: 1px solid #e0e0e0; padding: 0.5rem 0; text-align: center; }
+    nav a { color: #1976d2; text-decoration: none; margin: 0 1.2rem; font-weight: 600; font-size: 1.05rem; }
+    nav a:hover { text-decoration: underline; }
+    main { max-width: 900px; margin: 2rem auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 12px #0001; padding: 2.5rem 2rem; }
+    h2 { color: #1976d2; font-weight: 700; margin-top: 2.5rem; }
+    h3 { color: #1976d2; font-weight: 600; margin-top: 2rem; }
+    ul, ol { margin-left: 2rem; }
+    code, pre { background: #f0f4f8; color: #1976d2; border-radius: 4px; padding: 2px 6px; font-size: 1rem; }
+    .section { margin-bottom: 2.5rem; }
+    .module-card { background: #f7f9fb; border: 1px solid #e0e0e0; border-radius: 8px; padding: 1.2rem 1rem; margin-bottom: 1.2rem; }
+    .api-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+    .api-table th, .api-table td { border: 1px solid #e0e0e0; padding: 0.6rem 0.8rem; text-align: left; }
+    .api-table th { background: #f0f4f8; font-weight: 600; }
+    .footer { text-align: center; color: #888; font-size: 0.95rem; margin-top: 3rem; padding-bottom: 1.5rem; }
+    @media (max-width: 600px) {
+      main { padding: 1rem 0.5rem; }
+      nav a { margin: 0 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>PayrollPro – Project Documentation</h1>
+    <p>A full-stack payroll management system for modern organizations</p>
+  </header>
+  <nav>
+    <a href="#overview">Overview</a>
+    <a href="#architecture">Architecture</a>
+    <a href="#database">Database Schema</a>
+    <a href="#backend">Backend</a>
+    <a href="#frontend">Frontend</a>
+    <a href="#python">Python Utility</a>
+    <a href="#modules">Modules</a>
+    <a href="#api">API</a>
+    <a href="#uiux">UI/UX Design</a>
+    <a href="#faq">FAQ</a>
+  </nav>
+  <main>
+    <section id="overview" class="section">
+      <h2>Project Overview</h2>
+      <p><strong>PayrollPro</strong> is a full-stack web application designed to manage employees, holidays, vacations, work logs, and payroll calculations. It is built for extensibility, modern UI/UX, and real-world business needs. This documentation explains every part of the project, the reasoning behind each design, and how everything fits together.</p>
+    </section>
+
+    <section id="architecture" class="section">
+      <h2>Architecture & Technology Choices</h2>
+      <ul>
+        <li><strong>Frontend:</strong> React (with Material-UI for modern, responsive UI)</li>
+        <li><strong>Backend:</strong> Node.js + Express (RESTful API, scalable, easy to maintain)</li>
+        <li><strong>Database:</strong> Supabase (PostgreSQL, managed, secure, scalable)</li>
+        <li><strong>ORM:</strong> Sequelize (object-relational mapping for Node.js)</li>
+        <li><strong>Python Utility:</strong> Standalone script for direct DB access, analytics, or admin tasks</li>
+      </ul>
+      <p><strong>Why these choices?</strong> React and MUI provide a fast, beautiful UI. Node.js/Express is a proven backend for REST APIs. Supabase offers a managed, secure Postgres database. Sequelize simplifies DB code. Python is used for admin/data tasks because of its ecosystem and ease of use.</p>
+    </section>
+
+    <section id="database" class="section">
+      <h2>Database Schema</h2>
+      <p>The database is designed for clarity, normalization, and extensibility. Each table has a clear purpose and relationships are enforced with foreign keys.</p>
+      <ul>
+        <li><strong>employees</strong>: Stores employee info, role (salaried/hourly), salary/hourly rate.</li>
+        <li><strong>work_logs</strong>: Tracks daily work hours for each employee.</li>
+        <li><strong>holidays</strong>: Company holidays (affects payroll, work log generation).</li>
+        <li><strong>vacations</strong>: Employee vacation periods (affects payroll, reporting).</li>
+      </ul>
+      <pre><code>employees (id, fullName, role, salary, hourlyRate, createdAt, updatedAt)
+work_logs (id, employeeId, date, hoursWorked, createdAt, updatedAt)
+holidays (id, name, date, createdAt, updatedAt)
+vacations (id, employeeId, startDate, endDate, createdAt, updatedAt)</code></pre>
+      <p><strong>Why this schema?</strong> It covers all core HR/payroll needs, is easy to extend (add payslips, tax, etc.), and supports robust reporting.</p>
+    </section>
+
+    <section id="backend" class="section">
+      <h2>Backend (Node.js/Express)</h2>
+      <p>The backend exposes a RESTful API for all data operations. It uses Sequelize ORM for safe, maintainable DB access. Each controller is focused on a single resource (employees, work logs, etc.).</p>
+      <ul>
+        <li><strong>Why Express?</strong> Simple, fast, and widely used for REST APIs.</li>
+        <li><strong>Why Sequelize?</strong> Prevents SQL injection, makes migrations and queries easier, and keeps code DRY.</li>
+        <li><strong>Why REST?</strong> Easy to test, integrate, and scale. Works with any frontend or tool.</li>
+      </ul>
+      <p>All business logic (like payroll calculation) is in the backend, so the frontend stays simple and secure.</p>
+    </section>
+
+    <section id="frontend" class="section">
+      <h2>Frontend (React + Material-UI)</h2>
+      <p>The frontend is a single-page React app using Material-UI for a modern, responsive look. Each page/component is focused on a single responsibility (list, form, dashboard, etc.).</p>
+      <ul>
+        <li><strong>Why React?</strong> Fast, component-based, and easy to maintain.</li>
+        <li><strong>Why Material-UI?</strong> Professional, accessible, and responsive out of the box.</li>
+        <li><strong>Why Axios?</strong> Simple, promise-based HTTP client for API calls.</li>
+      </ul>
+      <p>All API calls are in service files for separation of concerns. The UI is designed for clarity, speed, and ease of use.</p>
+    </section>
+
+    <section id="python" class="section">
+      <h2>Python Utility Script</h2>
+      <p>A standalone Python script is included for direct database access, data seeding, analytics, or admin tasks. It uses <code>psycopg2</code> for Postgres access and <code>faker</code> for generating realistic dummy data.</p>
+      <ul>
+        <li><strong>Why Python?</strong> Great for scripting, data analysis, and admin tasks.</li>
+        <li><strong>Why psycopg2?</strong> The most popular, reliable Postgres driver for Python.</li>
+        <li><strong>Why Faker?</strong> Generates realistic test data for development and demos.</li>
+      </ul>
+    </section>
+
+    <section id="modules" class="section">
+      <h2>Major Modules & Their Purpose</h2>
+      <div class="module-card">
+        <h3>Employees</h3>
+        <p>Central to the system. Stores all employee data, including name, role (salaried/hourly), and pay info. Used for all other modules (work logs, vacations, payroll).</p>
+      </div>
+      <div class="module-card">
+        <h3>Work Logs</h3>
+        <p>Tracks daily work hours for each employee. Used for payroll calculation (especially for hourly employees) and reporting.</p>
+      </div>
+      <div class="module-card">
+        <h3>Holidays</h3>
+        <p>Stores company holidays. Used to exclude days from work log generation and payroll calculation.</p>
+      </div>
+      <div class="module-card">
+        <h3>Vacations</h3>
+        <p>Tracks employee vacation periods. Used to adjust payroll and for leave reporting.</p>
+      </div>
+      <div class="module-card">
+        <h3>Payroll</h3>
+        <p>Calculates pay for each employee based on their role and work logs. For salaried employees, uses monthly salary. For hourly, multiplies hours worked by hourly rate. Can be extended for tax, deductions, and payslips.</p>
+      </div>
+    </section>
+
+    <section id="api" class="section">
+      <h2>API Endpoints & Why They Exist</h2>
+      <table class="api-table">
+        <tr><th>Method</th><th>Endpoint</th><th>Description</th><th>Why?</th></tr>
+        <tr><td>GET</td><td>/api/employees</td><td>List all employees</td><td>Needed for employee management and selection in other modules</td></tr>
+        <tr><td>POST</td><td>/api/employees</td><td>Add employee</td><td>Allows HR/admin to add new staff</td></tr>
+        <tr><td>GET</td><td>/api/employees/:id</td><td>Get employee by ID</td><td>View/edit employee details</td></tr>
+        <tr><td>GET</td><td>/api/employees/:id/summary</td><td>Get employee summary</td><td>Show dashboard and reports for an individual</td></tr>
+        <tr><td>GET</td><td>/api/employees/payroll/calculate?month=YYYY-MM</td><td>Calculate payroll for all employees</td><td>Run payroll for a pay period</td></tr>
+        <tr><td>GET</td><td>/api/holidays</td><td>List all holidays</td><td>Needed for work log and payroll logic</td></tr>
+        <tr><td>POST</td><td>/api/holidays</td><td>Add holiday</td><td>HR/admin can add new holidays</td></tr>
+        <tr><td>GET</td><td>/api/vacations</td><td>List all vacations</td><td>Track employee leave</td></tr>
+        <tr><td>POST</td><td>/api/vacations</td><td>Add vacation</td><td>Employees/HR can request/record leave</td></tr>
+        <tr><td>GET</td><td>/api/worklogs</td><td>List all work logs</td><td>For reporting and payroll</td></tr>
+        <tr><td>POST</td><td>/api/worklogs</td><td>Add work log</td><td>Employees/HR can record hours worked</td></tr>
+        <tr><td>GET</td><td>/api/worklogs/employee/:employeeId</td><td>List work logs for an employee</td><td>Show work history for an individual</td></tr>
+        <tr><td>GET</td><td>/api/vacations/employee/:employeeId</td><td>List vacations for an employee</td><td>Show leave history for an individual</td></tr>
+      </table>
+      <p>All endpoints are RESTful for clarity, testability, and integration with any frontend or tool.</p>
+    </section>
+
+    <section id="uiux" class="section">
+      <h2>UI/UX Design Philosophy</h2>
+      <ul>
+        <li><strong>Modern, Clean, and Consistent:</strong> Uses Material-UI for a professional look and feel.</li>
+        <li><strong>Responsiveness:</strong> Works on desktop, tablet, and mobile.</li>
+        <li><strong>Visual Hierarchy:</strong> Important actions and data are visually prominent.</li>
+        <li><strong>Feedback:</strong> Uses alerts, snackbars, and spinners for user feedback.</li>
+        <li><strong>Accessibility:</strong> Color contrast, font sizes, and keyboard navigation are considered.</li>
+        <li><strong>Separation of Concerns:</strong> Each component/page does one thing well.</li>
+      </ul>
+      <p>Why? To make the app easy to use, easy to learn, and pleasant for both HR/admins and employees.</p>
+    </section>
+
+    <section id="faq" class="section">
+      <h2>FAQ & Onboarding for New Developers</h2>
+      <ul>
+        <li><strong>How do I run the project?</strong> See the README for setup. Start backend, frontend, and (optionally) the Python script.</li>
+        <li><strong>How do I add a new feature?</strong> Add a new route/controller in the backend, a new service/component in the frontend, and update the docs.</li>
+        <li><strong>How do I change the database?</strong> Update the Sequelize models and Supabase schema, then update the frontend/backend as needed.</li>
+        <li><strong>How do I test the API?</strong> Use Postman, curl, or the frontend UI.</li>
+        <li><strong>How do I generate more data?</strong> Use the Python script with Faker to seed the database.</li>
+        <li><strong>What if I get an error?</strong> Check the Troubleshooting section in the README, or look at the backend/frontend logs.</li>
+      </ul>
+      <p>If you're new, read this page top to bottom, then explore the codebase. Every major part is modular and well-commented.</p>
+    </section>
+
+    <div class="footer">
+      &copy; {new Date().getFullYear()} PayrollPro. All rights reserved.
+    </div>
+  </main>
+</body>
+</html> 
