@@ -22,55 +22,55 @@ const AppRoutes = () => {
         
         {/* Protected Routes */}
         <Route path="/home" element={
-          <PrivateRoute allowedRoles={['admin', 'hr', 'employee']}>
+          <PrivateRoute>
             <HomePage />
           </PrivateRoute>
         } />
         
         <Route path="/employees" element={
-          <PrivateRoute allowedRoles={['admin', 'hr']}>
+          <PrivateRoute>
             <EmployeePage />
           </PrivateRoute>
         } />
         
         <Route path="/employees/:id/dashboard" element={
-          <PrivateRoute allowedRoles={['admin', 'hr', 'employee']}>
+          <PrivateRoute>
             <EmployeeDashboardPage />
           </PrivateRoute>
         } />
         
         <Route path="/worklogs" element={
-          <PrivateRoute allowedRoles={['admin', 'hr', 'employee']}>
+          <PrivateRoute>
             <WorkLogPage />
           </PrivateRoute>
         } />
         
         <Route path="/vacations" element={
-          <PrivateRoute allowedRoles={['admin', 'hr', 'employee']}>
+          <PrivateRoute>
             <VacationPage />
           </PrivateRoute>
         } />
         
         <Route path="/holidays" element={
-          <PrivateRoute allowedRoles={['admin', 'hr']}>
+          <PrivateRoute>
             <HolidayPage />
           </PrivateRoute>
         } />
         
         <Route path="/payroll" element={
-          <PrivateRoute allowedRoles={['admin', 'hr']}>
+          <PrivateRoute>
             <PayrollPage />
           </PrivateRoute>
         } />
         
         <Route path="/profile" element={
-          <PrivateRoute allowedRoles={['admin', 'hr', 'employee']}>
+          <PrivateRoute>
             <UserProfilePage />
           </PrivateRoute>
         } />
         
         <Route path="/admin/users" element={
-          <PrivateRoute allowedRoles={['admin']}>
+          <PrivateRoute>
             <AdminUserManagementPage />
           </PrivateRoute>
         } />

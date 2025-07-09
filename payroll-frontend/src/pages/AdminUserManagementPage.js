@@ -44,13 +44,6 @@ const AdminUserManagementPage = () => {
   const [success, setSuccess] = useState('');
   const [openDialog, setOpenDialog] = useState(false);
 
-  // Redirect if not admin
-  useEffect(() => {
-    if (!isAdmin()) {
-      navigate('/');
-    }
-  }, [isAdmin, navigate]);
-
   const getRoleColor = (role) => {
     switch (role) {
       case 'admin': return 'error';
@@ -68,16 +61,6 @@ const AdminUserManagementPage = () => {
       default: return role;
     }
   };
-
-  if (!isAdmin()) {
-    return (
-      <Container>
-        <Alert severity="error" sx={{ mt: 2 }}>
-          Access denied. Only administrators can access this page.
-        </Alert>
-      </Container>
-    );
-  }
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>

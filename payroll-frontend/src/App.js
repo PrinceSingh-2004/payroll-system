@@ -8,6 +8,7 @@ import AppRoutes from './routes';
 import { AuthProvider } from './contexts/AuthContext';
 import { supabase } from './supabaseClient';
 import Snackbar from '@mui/material/Snackbar';
+import GlassBackground from './components/GlassBackground';
 
 function SupabaseDebug() {
   const [result, setResult] = useState(null);
@@ -25,11 +26,18 @@ function SupabaseDebug() {
 }
 
 const AppContent = () => {
-  const { user, role, loading, roleError, retryRoleFetch } = useAuth();
+  const { user, loading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [loadingTimeout, setLoadingTimeout] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
+
+  // Redirect authenticated users away from login page
+  useEffect(() => {
+    if (user && (location.pathname === '/' || location.pathname === '/login')) {
+      navigate('/home', { replace: true });
+    }
+  }, [user, location, navigate]);
 
   // Add timeout to prevent infinite loading
   useEffect(() => {
@@ -42,21 +50,8 @@ const AppContent = () => {
     return () => clearTimeout(timer);
   }, [loading]);
 
-  // Redirect after login based on role
-  useEffect(() => {
-    if (user && !loading && !roleError && (location.pathname === '/' || location.pathname === '/login')) {
-      if (role === 'admin') {
-        navigate('/admin/users');
-      } else if (role === 'hr') {
-        navigate('/employees');
-      } else if (role === 'employee') {
-        navigate('/home');
-      }
-    }
-  }, [user, role, loading, roleError, navigate, location]);
-
   // Show loading while auth is being determined
-  if (loading && !loadingTimeout && !roleError) {
+  if (loading && !loadingTimeout) {
     return (
       <Box sx={{ 
         display: 'flex', 
@@ -73,8 +68,8 @@ const AppContent = () => {
     );
   }
 
-  // Show error if loading times out or roleError is set
-  if (loadingTimeout || (roleError && user)) {
+  // Show error if loading times out
+  if (loadingTimeout) {
     return (
       <Box sx={{ 
         display: 'flex', 
@@ -84,14 +79,11 @@ const AppContent = () => {
         minHeight: '100vh' 
       }}>
         <Typography variant="h5" color="error" gutterBottom>
-          {roleError ? 'Role Error' : 'Loading Timeout'}
+          Loading Timeout
         </Typography>
         <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>
-          {roleError || 'The app is taking too long to load. Please check your internet connection and try refreshing the page.'}
+          The app is taking too long to load. Please check your internet connection and try refreshing the page.
         </Typography>
-        <Button variant="contained" onClick={retryRoleFetch} sx={{ mb: 2 }}>
-          Retry
-        </Button>
         <Button variant="outlined" onClick={() => window.location.reload()}>
           Refresh Page
         </Button>
@@ -112,20 +104,23 @@ const AppContent = () => {
   }
 
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: 'background.default', display: 'flex', flexDirection: 'column' }}>
-      {user && <Navbar />}
-      <Container maxWidth="lg" sx={{ flex: 1, py: 3 }}>
-        <AppRoutes />
-      </Container>
-      {user && <Footer />}
-      <Snackbar
-        open={snackbar.open}
-        autoHideDuration={4000}
-        onClose={() => setSnackbar({ ...snackbar, open: false })}
-        message={snackbar.message}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      />
-    </Box>
+    <>
+      <GlassBackground />
+      <Box sx={{ minHeight: '100vh', bgcolor: 'transparent', display: 'flex', flexDirection: 'column', position: 'relative', zIndex: 1 }}>
+        {user && <Navbar />}
+        <Container maxWidth="lg" sx={{ flex: 1, py: 3 }}>
+          <AppRoutes />
+        </Container>
+        {user && <Footer />}
+        <Snackbar
+          open={snackbar.open}
+          autoHideDuration={4000}
+          onClose={() => setSnackbar({ ...snackbar, open: false })}
+          message={snackbar.message}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        />
+      </Box>
+    </>
   );
 };
 

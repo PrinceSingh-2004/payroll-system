@@ -1,13 +1,58 @@
-body {
+body, .theme-light {
+  font-family: 'Inter', 'Poppins', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  color: #181c24;
+  background: transparent;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  padding: 0;
+  min-height: 100vh;
+  letter-spacing: 0.01em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+.theme-dark {
+  color: #f5f5f5;
+  background: transparent;
+}
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', 'Inter', 'Segoe UI', Arial, sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  margin-top: 0;
+  margin-bottom: 0.5em;
+  line-height: 1.2;
+}
+
+.theme-light h1, .theme-light h2, .theme-light h3, .theme-light h4, .theme-light h5, .theme-light h6 {
+  color: #10131a;
+}
+.theme-dark h1, .theme-dark h2, .theme-dark h3, .theme-dark h4, .theme-dark h5, .theme-dark h6 {
+  color: #fff;
+}
+
+p, label, span, td, th, input, button {
+  font-family: 'Inter', 'Poppins', 'Segoe UI', Arial, sans-serif;
+  font-size: 1rem;
+  color: inherit;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+label, th {
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.theme-light label, .theme-light th, .theme-light p, .theme-light span, .theme-light td, .theme-light input, .theme-light button {
+  color: #10131a;
+}
+
+.glass, .glass-dark {
+  transition: background 0.4s, box-shadow 0.4s;
+}
+
+@media (max-width: 600px) {
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.5rem; }
+  h3 { font-size: 1.2rem; }
 }
